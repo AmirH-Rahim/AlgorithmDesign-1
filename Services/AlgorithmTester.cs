@@ -2,7 +2,7 @@
 using AlgorithmComparator.Models;
 using AlgorithmDesign_1;
 
-namespace AlgorithmComparator.Services;
+namespace AlgorithmDesign_1.Services;
 
 public class AlgorithmTester
 {

@@ -1,6 +1,7 @@
 ﻿using AlgorithmComparator.Algorithms;
 using AlgorithmComparator.Services;
 using AlgorithmDesign_1;
+using AlgorithmDesign_1.Services;
 using System.Text;
 
 Console.OutputEncoding = Encoding.UTF8;
@@ -101,6 +102,109 @@ else
     Console.WriteLine(
         $"{secondAlgorithm.Name}: [{string.Join(", ", testResult.OutputB!)}]"
     );
+}
+
+var benchmarkRandom = new Random(100);
+
+var benchmarkInput = new int[3000];
+
+for (int i = 0; i < benchmarkInput.Length; i++)
+{
+    benchmarkInput[i] = benchmarkRandom.Next(-10000, 10001);
+}
+
+var performanceAnalyzer = new PerformanceAnalyzer();
+
+var performanceA = performanceAnalyzer.Measure(
+    firstAlgorithm,
+    benchmarkInput
+);
+
+var performanceB = performanceAnalyzer.Measure(
+    secondAlgorithm,
+    benchmarkInput
+);
+
+Console.WriteLine();
+Console.WriteLine("=================================");
+Console.WriteLine("Performance Comparison");
+Console.WriteLine("=================================");
+Console.WriteLine();
+
+Console.WriteLine($"Input Size: {benchmarkInput.Length}");
+Console.WriteLine();
+
+Console.WriteLine($"Algorithm A: {firstAlgorithm.Name}");
+Console.WriteLine(
+    $"Average Time: {performanceA.AverageMilliseconds:F4} ms"
+);
+Console.WriteLine(
+    $"Allocated Memory: {performanceA.AverageAllocatedBytes}"
+);
+Console.WriteLine(
+    $"Time Complexity: {firstAlgorithm.TimeComplexity}"
+);
+Console.WriteLine(
+    $"Space Complexity: {firstAlgorithm.SpaceComplexity}"
+);
+
+Console.WriteLine();
+
+Console.WriteLine($"Algorithm B: {secondAlgorithm.Name}");
+Console.WriteLine(
+    $"Average Time: {performanceB.AverageMilliseconds:F4} ms"
+);
+Console.WriteLine(
+    $"Allocated Memory: {performanceB.AverageAllocatedBytes}"
+);
+Console.WriteLine(
+    $"Time Complexity: {secondAlgorithm.TimeComplexity}"
+);
+Console.WriteLine(
+    $"Space Complexity: {secondAlgorithm.SpaceComplexity}"
+);
+
+Console.WriteLine();
+Console.WriteLine("=================================");
+Console.WriteLine("Comparison");
+Console.WriteLine("=================================");
+
+if (performanceA.AverageMilliseconds <
+    performanceB.AverageMilliseconds)
+{
+    Console.WriteLine(
+        $"{firstAlgorithm.Name} was faster in this test."
+    );
+}
+else if (performanceB.AverageMilliseconds <
+         performanceA.AverageMilliseconds)
+{
+    Console.WriteLine(
+        $"{secondAlgorithm.Name} was faster in this test."
+    );
+}
+else
+{
+    Console.WriteLine("Execution times were approximately equal.");
+}
+
+if (performanceA.AverageAllocatedBytes <
+    performanceB.AverageAllocatedBytes)
+{
+    Console.WriteLine(
+        $"{firstAlgorithm.Name} allocated less memory."
+    );
+}
+else if (performanceB.AverageAllocatedBytes <
+         performanceA.AverageAllocatedBytes)
+{
+    Console.WriteLine(
+        $"{secondAlgorithm.Name} allocated less memory."
+    );
+}
+else
+{
+    Console.WriteLine("Memory allocation was approximately equal.");
 }
 
 Console.WriteLine();
