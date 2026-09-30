@@ -1,4 +1,5 @@
 ﻿using AlgorithmComparator.Algorithms;
+using AlgorithmComparator.Services;
 using AlgorithmDesign_1;
 using System.Text;
 
@@ -44,6 +45,63 @@ Console.WriteLine();
 Console.WriteLine($"Algorithm B: {secondAlgorithm.Name}");
 Console.WriteLine($"Time Complexity: {secondAlgorithm.TimeComplexity}");
 Console.WriteLine($"Space Complexity: {secondAlgorithm.SpaceComplexity}");
+
+var testGenerator = new TestGenerator();
+
+var testCases = testGenerator.Generate(
+    randomTestCount: 100,
+    minSize: 1,
+    maxSize: 100,
+    minValue: -1000,
+    maxValue: 1000
+);
+
+var algorithmTester = new AlgorithmTester();
+
+var testResult = algorithmTester.Compare(
+    firstAlgorithm,
+    secondAlgorithm,
+    testCases
+);
+
+Console.WriteLine();
+Console.WriteLine("=================================");
+Console.WriteLine("Functional Test");
+Console.WriteLine("=================================");
+Console.WriteLine();
+
+if (testResult.AreEquivalent)
+{
+    Console.WriteLine("No differences were found.");
+    Console.WriteLine(
+        $"Passed: {testResult.PassedTests} / {testResult.TotalTests}"
+    );
+}
+else
+{
+    Console.WriteLine("The algorithms produced different outputs.");
+    Console.WriteLine();
+
+    Console.WriteLine(
+        $"Passed before failure: {testResult.PassedTests}"
+    );
+
+    Console.WriteLine();
+
+    Console.WriteLine(
+        $"Input: [{string.Join(", ", testResult.FailedInput!)}]"
+    );
+
+    Console.WriteLine();
+
+    Console.WriteLine(
+        $"{firstAlgorithm.Name}: [{string.Join(", ", testResult.OutputA!)}]"
+    );
+
+    Console.WriteLine(
+        $"{secondAlgorithm.Name}: [{string.Join(", ", testResult.OutputB!)}]"
+    );
+}
 
 Console.WriteLine();
 Console.WriteLine("Press any key to exit...");
